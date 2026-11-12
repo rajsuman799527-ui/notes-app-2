@@ -6,12 +6,13 @@
     <title>Notes</title>
     <script>
       function showErr(m){var p=document.createElement('pre');p.style.cssText='position:fixed;inset:0;z-index:99999;margin:0;padding:16px;background:#fff;color:#c00;white-space:pre-wrap;overflow:auto;font-size:13px';p.textContent=m;document.documentElement.appendChild(p)}
-      window.addEventListener('error',function(e){showErr('ERROR: '+e.message+'\n'+(e.filename||'')+':'+(e.lineno||''))});
+      window.addEventListener('error',function(e){var t=e.target;if(t&&(t.src||t.href)){showErr('LOAD FAILED: '+(t.src||t.href));return}showErr('ERROR: '+e.message+'\n'+(e.filename||'')+':'+(e.lineno||''))},true);
       window.addEventListener('unhandledrejection',function(e){showErr('PROMISE: '+((e.reason&&e.reason.stack)||e.reason))});
+      setTimeout(function(){var r=document.getElementById('root');if(r&&r.textContent.indexOf('Waiting for app')>-1)showErr('App JS did not render after 3s')},3000);
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><p style="font:16px sans-serif;padding:16px">HTML loaded. Waiting for app...</p></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
